@@ -74,7 +74,7 @@ def customerItemsList(request):
 # method to search for customer items
 def customerItemSearch(request):
     pk = request.GET['item_search']
-    itemsSearched = Item.objects.filter(~Q(customer_id=request.user),name__contains=pk,end_date__gt=datetime.now(),
+    itemsSearched = Item.objects.filter(~Q(customer_id=request.user),name__icontains=pk,end_date__gt=datetime.now(),
                                     start_date__lte=datetime.now());
     itemsSearchedFlag = True
     print("itemsSearched------",itemsSearched)
