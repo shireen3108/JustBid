@@ -11,7 +11,7 @@
         <div class="card-deck">
             {% for bid in bids %}
 
-                {% if bid.item_id|maxBidById ==  bid.id %}
+                {% if bid.item_id|maxBidById:user ==  bid.id %}
 
                     <div class="card mb-3 mt-3 border-primary text-center " style="min-width: 20rem;max-width: 20rem">
                         {% if bid.item_id.image %}

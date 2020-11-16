@@ -25,8 +25,8 @@ def maxBidBy(item_id):
     return maxBid.customer_id.username
 
 @register.filter(name='maxBidById')
-def maxBidById(item_id):
-    maxBid = Bid.objects.filter(item_id=item_id).order_by('-time').first()
+def maxBidById(item_id,user):
+    maxBid = Bid.objects.filter(item_id=item_id,customer_id=user.id).order_by('-time').first()
     return maxBid.id
 
 
