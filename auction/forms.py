@@ -43,21 +43,24 @@ class CustomerItemsForm(forms.ModelForm):
         fields = ("name", "price", "start_date", "image", "comments",)
         widgets = {
             'comments': forms.Textarea(attrs={'placeholder': 'tell about the item..', 'rows': 5, }),
-            'price': forms.TextInput(attrs={'placeholder': 'In dollars($)', }),
+            'price': forms.TextInput(attrs={'placeholder': 'In dollars($)', 'min': 1 ,}),
             'start_date': DateTimePickerInput,
         }
 
     def clean_start_date(self):
         start_date = self.cleaned_data['start_date']
-        print('start_date', start_date)
         start_date = start_date.replace(tzinfo=None)
-        print('start_date', start_date)
         now = datetime.today()
         now = now.replace(second=0, microsecond=0)
-        print('now', now)
         if start_date < now:
             raise ValidationError('Start Date should be current or future time')
         return start_date
+
+    def clean_price(self):
+        price = self. cleaned_data['price']
+        if price < 1:
+            raise forms.ValidationError("Price cannot be less than $1")
+        return price
 
 # form for editing customers items
 class CustomerEditItemsForm(forms.ModelForm):
@@ -85,7 +88,7 @@ class CustomerRepostItemsForm(forms.ModelForm):
         widgets = {
             'comments': forms.Textarea(attrs={'placeholder': 'tell about the item..', 'rows': 5, }),
             'start_date': DateTimePickerInput,
-            'price': forms.TextInput(attrs={'placeholder': 'In dollars($)', }),
+            'price': forms.TextInput(attrs={'placeholder': 'In dollars($)', 'min': 1 ,}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -97,13 +100,19 @@ class CustomerRepostItemsForm(forms.ModelForm):
     def clean_start_date(self):
         cleaned_data = super(CustomerRepostItemsForm, self).clean()
         start_date = cleaned_data.get('start_date')
-        print('start_date', start_date)
         start_date = start_date.replace(tzinfo=None)
-        print('start_date', start_date)
         msg = 'Start Date should be current or future time'
-        if start_date < datetime.today():
+        now = datetime.today()
+        now = now.replace(second=0, microsecond=0)
+        if start_date < now:
             raise ValidationError (msg)
-        return cleaned_data
+        return start_date
+
+    def clean_price(self):
+        price = self. cleaned_data['price']
+        if price < 1:
+            raise forms.ValidationError("Price cannot be less than $1")
+        return price
 
 # form for customer bids details
 class CustomerBidsForm(forms.ModelForm):

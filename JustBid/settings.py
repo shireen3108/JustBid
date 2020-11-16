@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '39-v2s!u0!ix&w(7p2d5f%48motld-le6d6ljm@s@7^q%@zo%r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -82,11 +82,18 @@ WSGI_APPLICATION = 'JustBid.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'justbid',
+    #     'USER': 'justbid_owner',
+    #     'PASSWORD':'shireen'
+    # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'justbid',
-        'USER': 'justbid_owner',
-        'PASSWORD':'shireen'
+        'HOST': 'ec2-54-156-149-189.compute-1.amazonaws.com',
+        'NAME': 'de1c1id49i6434',
+        'USER': 'glibnoxctlyxom',
+        'PASSWORD': '3fe19ccbd9bba59c630b705da936b2cde83dec058e87a57cfe76822fd10f2511'
     }
 }
 

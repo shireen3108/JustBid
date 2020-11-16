@@ -178,7 +178,6 @@ def customerItemBidHistory(request, pk):
 # method to make the winner for the bids by  the owner of customer
 def customerBidWinner(request, pk):
     bid = Bid.objects.filter(id=pk).first()
-    print('winner is', bid.customer_id, 'for item: ', bid.item_id.name)
     item = Item.objects.filter(id=bid.item_id.id).first()
     item.name = item.name + ' BID DONE'
     item.save()
@@ -278,7 +277,6 @@ def sendEmail(pdf,request):
     html_template = get_template("customer_email_generation_myitems-bids.html").render(context=content)
     message.attach_alternative(html_template, "text/html")
     message.attach('MyItems-BidHistory.pdf', pdf, 'application/pdf')
-    print("message send status=",message.send())
 
 
 
