@@ -50,10 +50,7 @@ def endswith(value, suffix):
 @register.filter(name='checkEndDatePassed')
 def checkEndDatePassed(enddate):
     now = datetime.today()
-    print('enddate bef', enddate)
     enddate = enddate.replace(tzinfo=None)- timedelta(hours=6)
-    print('now', now)
-    print('enddate', enddate)
     if enddate > now:
         return True
     else:

@@ -1,5 +1,5 @@
-{% autoescape off %}
-{% blocktrans %}Hello {{username }},{% endblocktrans %}
+{% load i18n %}{% autoescape off %}
+{% trans "Hello "%}{{ uname }},<br>
   {% blocktrans %}
     You have requested a PDF report to check the history of bids for your items.
   Attached is the report.
@@ -9,8 +9,8 @@
 <br>
     <br>
  {% trans "Thanks for using our site!" %}
-
-{% blocktrans %}Regards,{% endblocktrans %}
+<br>
+{% trans "Regards," %}<br>
 {% blocktrans %}{{ jb_site_name }}.{% endblocktrans %}
 
 {% endautoescape %}

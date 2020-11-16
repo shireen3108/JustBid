@@ -277,7 +277,7 @@ def sendEmail(pdf,request):
     html_template = get_template("customer_email_generation_myitems-bids.html").render(context=content)
     message.attach_alternative(html_template, "text/html")
     message.attach('MyItems-BidHistory.pdf', pdf, 'application/pdf')
-
+    message.send()
 
 
 
