@@ -34,7 +34,6 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'storages',
     'django.contrib.postgres',
-    'auction.apps.AuctionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     "bootstrap4",
     "bootstrap_datepicker_plus",
+    'auction.apps.AuctionConfig',
 ]
 
 MIDDLEWARE = [
