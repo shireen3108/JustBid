@@ -42,7 +42,7 @@
                         {% endif %}
                         <p class="card-text"><b>Description:</b> {{ item.comments }}</p>
                         <p class="card-text"><b>Created on:</b> {{ item.start_date }}</p>
-                        <p class="card-text"><b>End Date:</b> {{ item.end_date }}</p>
+                        <p class="card-text  {% if not item.end_date|checkEndDatePassed %} blink_me text-danger font-weight-bold {% endif %}"><b>End Date:</b> {{ item.end_date }}</p>
                         <p class="card-text"><b>Price: ${{ item.price }}</b></p>
                         <a class="btn btn-secondary btn-sm float-right  mr-2"
                            href="{% url "auction:customeritems_delete" item.id %}" class="card-link"
