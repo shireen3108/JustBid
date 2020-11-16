@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import django_heroku
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '39-v2s!u0!ix&w(7p2d5f%48motld-le6d6ljm@s@7^q%@zo%r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -31,14 +32,18 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-
+    'storages',
+    'django.contrib.postgres',
+    'auction.apps.AuctionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'auction.apps.AuctionConfig',
+    'crispy_forms',
+    "bootstrap4",
+    "bootstrap_datepicker_plus",
 ]
 
 MIDDLEWARE = [
@@ -78,11 +83,12 @@ WSGI_APPLICATION = 'JustBid.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'justbid',
+        'USER': 'justbid_owner',
+        'PASSWORD':'shireen'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -116,6 +122,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'home'
+AUTH_USER_MODEL = 'auction.Customer'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -123,8 +133,32 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'auction/media')
 MEDIA_URL ='/media/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'auction/static')
 STATIC_URL = '/static/'
-AUTH_USER_MODEL = 'auction.Customer'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-LOGIN_REDIRECT_URL = '/'
+## aws s3 settings to upload items dynamically
+AWS_ACCESS_KEY_ID = ' AKIAIEDQLNGF5EFHVUAA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'justbid.com'
+
+AWS_DEFAULT_ACL = None
+
+AWS_S3_REGION_NAME = 'us-east-2'
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+
+
+
+# Email settings for JustBid.com 8210 Assignment 3 Individual Project on Nov 2 2020
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'justbid.com404@gmail.com'
+EMAIL_HOST_PASSWORD = '8210as3!'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+django_heroku.settings(locals())

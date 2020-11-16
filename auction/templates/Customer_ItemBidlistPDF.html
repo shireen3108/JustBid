@@ -1,0 +1,99 @@
+{% load justbid_extras %}
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    {% if bids %}
+        <h1 style="text-align: center; font-size: xx-large; color: darkred"><u> Bid History
+            for {{ myItems.0.customer_id.username }}'s Items </u></h1>
+
+        <table style="border: 1px solid #073259;">
+            <tr>
+                <td>
+                    {% for myitem in myItems %}
+                        <table>
+                            <tr>
+                                <th style="font-size: x-large; color: midnightblue">
+                                    <br>
+                                    Bid History of {{ myitem.customer_id.username }} for
+                                    Item:<u>{{ myitem.name|cut:'BID DONE' }}</u> ${{ myitem.price }} with end
+                                    date {{ myitem.end_date }}<br>
+                                   ( {{ myitem|getBidsCount  }} )
+                                    <br>
+                                </th>
+                            </tr>
+
+                            {% if myitem|getBidsCount == 0 %}
+                                <tr>
+                                    <td style="font-size: x-large">
+                                        <li style="list-style-type:square; padding-left: 15px">
+                                            No bids available
+                                        </li>
+
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            {% for bid in bids %}
+
+                                {% if bid.item_id.id == myitem.id and  bid.item_id.name|endswith:"BID DONE" %}
+
+                                    <tr>
+                                        <td style="font-size: x-large">
+                                            <li style="list-style-type:square; padding-left: 15px">
+                                                {% if 'BID DONE' in bid|stringformat:"s" %}
+                                                    {{ bid|cut:'BID DONE' }}
+                                                {% endif %}
+                                                <b> Winner</b></li>
+
+                                        </td>
+                                    </tr>
+
+                                    {#                                </tr>#}
+                                {% elif bid.item_id.id == myitem.id %}
+
+                                    <tr>
+                                        <td style="font-size: x-large">
+                                            <li style="list-style-type:square; padding-left: 15px">
+                                                {% if 'BID DONE' in bid|stringformat:"s" %}
+                                                    {{ bid|cut:'BID DONE' }}
+                                                {% else %}
+                                                    {{ bid }}
+                                                {% endif %} </li>
+                                            {% if myitem|getMyBidsCount:myitem.customer_id.id == 0 %}
+                                                No bids available
+                                            {% endif %}</td>
+                                    </tr>
+
+                                    {#                                </tr>#}
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                        <br><br><br>
+                    {% endfor %}
+
+                </td>
+            </tr>
+        </table>
+        </div>
+    {% else %}
+        <div class="list-group">
+        <button type="button" class="list-group-item list-group-item-action active ">
+            No bids available!!
+        </button>
+    {% endif %}
+    </div>
+</body>
+</html>

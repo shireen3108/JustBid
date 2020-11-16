@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load justbid_extras %}
+{% block content %}
+    <h3>Bid Again for <i class="text-primary text-capitalize" >{{ item.name }}</i></h3>
+<p><b>Item Name:</b> <i>{{ item.name }}</i></p>
+    <p><b>Actual Price:</b> <i>{{ item.price }}</i></p>
+    <p><b>Item Created by:</b> <i>{{ item.customer_id.username }}</i></p>
+    <p><b>Your Latest Max Bid is:</b> <i>${{ mycurrentBid }}</i></p>
+    <p><b>Current Max Bid Amount:</b> <i>${{ item.id|maxBidValue }}</i></p>
+
+    <form method="POST" style="font-weight: bold">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-info">Bid</button><span></span>
+        <a href="{% url "auction:customer_bids" %}" class="btn btn-secondary ml-2 ">Cancel</a>
+    </form>
+</div>
+
+{% endblock content%}

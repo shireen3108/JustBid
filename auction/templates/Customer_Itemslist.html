@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load justbid_extras %}
+{% block title %}Items{% endblock title %}
+{% block content %}
+  <h2 class="text-center">My Items</h2>
+    <div class="container">
+        <div class="card-deck">
+            <div class="card mb-3 mt-3 text-white bg-info border-success" style="min-width: 20rem;max-width: 20rem">
+
+                <img class="card-img-top mt-1" src='{% static "images/JustBid_logo.png" %}' alt="Card image cap"
+                     style="width:175px;height:175px;align-self: center">
+                <div class="card-body text-white">
+                    <h5 class="card-title text-white">Click here to add an item for auction!</h5>
+                    <a class="btn btn-success float-left mt-5 text-white" href="{% url 'auction:customeritems_add' %}">Add
+                        an Item</a>
+                    {%  if items %} <a class="btn btn-warning  float-left mt-5 ml-2 text-white" href="{% url 'auction:Customer_GetPDFBidslist' %}" onclick="alert('The Report will be sent to your email : {{ items.0.customer_id.email }}')
+">Email Report</a> {% endif %}
+                </div>
+            </div>
+        {%  if items %}
+
+
+            {% for item in items %}
+                <div class="card mb-3 mt-3" style="min-width: 20rem;max-width: 20rem">
+                    <a class="btn btn-secondary btn-sm float-right  mr-ml-2"
+                       href="{% url "auction:customeritem_bidhistory" item.id %}" class="card-link"
+                    >( {{ item|getBidsCount }} )</a>
+                    {% if item.image %}
+                        <img class="card-img-top mt-1" src="{{ item.image.url }}" alt="Card image cap"
+                             style="width:175px;height:175px;align-self: center">
+                    {% else %}
+                        <img class="card-img-top mt-1" src='{% static "images/JustBid_logo.png" %}' alt="Card image cap"
+                             style="width:175px;height:175px;align-self: center">
+                    {% endif %}
+                    <div class="card-body">
+                        {% if item.name|endswith:"BID DONE" %}
+                            <marquee width="100%" direction="Right" height="30px"><h4 style="color: mediumblue">  BID DONE</h4></marquee>
+                            <h5 class="card-title">{{ item.name|cut:'BID DONE'}} </h5>
+                            {% else %}
+                             <h5 class="card-title">{{ item.name }} </h5>
+                        {% endif %}
+                        <p class="card-text"><b>Description:</b> {{ item.comments }}</p>
+                        <p class="card-text"><b>Created on:</b> {{ item.start_date }}</p>
+                        <p class="card-text"><b>End Date:</b> {{ item.end_date }}</p>
+                        <p class="card-text"><b>Price: ${{ item.price }}</b></p>
+                        <a class="btn btn-secondary btn-sm float-right  mr-2"
+                           href="{% url "auction:customeritems_delete" item.id %}" class="card-link"
+                           onclick="return confirm('Are you sure you want to delete {{ item.name }}?')">Delete Item</a>
+                        {% if item.end_date|checkEndDatePassed %}
+                            <a class="btn btn-primary btn-sm float-right mr-2"
+                               href="{% url 'auction:customeritems_edit' item.id %}" class="card-link">Edit Item</a>
+                        {% endif %}
+
+                        {% if not item.end_date|checkEndDatePassed and item|getBidsCount == 0 and not item.name|endswith:"- Repost" %}
+                            <a class="btn btn-primary btn-sm float-right mr-2"
+                               onclick="return confirm('Are you sure you want to repost {{ item.name }}?, You can do this only once!!')"
+                               href="{% url 'auction:customeritems_repost' item.id %}" class="card-link">Repost this
+                                Item</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            {% else %}
+            <h4 class="text-center text-muted"><i>No Items available in your list.</i></h4>
+          {% endif %}
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}

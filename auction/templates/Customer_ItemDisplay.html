@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+            <div class="card mb-3 mt-3" style="min-width: 20rem;max-width: 20rem">
+            {% if item.image  %}
+                   <img class="card-img-top mt-1" src="{{ item.image.url }}" alt="Card image cap" style="width:175px;height:175px;align-self: center">
+                {% else  %}
+                <img class="card-img-top mt-1"  src='{% static "images/JustBid_logo.png" %}'  alt="Card image cap" style="width:175px;height:175px;align-self: center">
+            {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">Name: {{ item.name }}</h5>
+                    <p class="card-text">Description: {{ item.comments }}</p>
+                    <p class="card-text">Created: {{ item.start_date }}</p>
+                    <p class="card-text">End date: {{ item.end_date }}</p>
+                    <p class="card-text">Price: <b>${{ item.price }}</b></p>
+
+
+                    <a class="btn btn-secondary btn-sm float-right  mr-2" href="{% url "auction:customeritems_delete" item.id %}" class="card-link"
+                    onclick="return confirm('Are you sure you want to delete {{ item.name }}?')">Delete Item</a>
+                     <a class="btn btn-primary btn-sm float-right mr-2" href="{% url 'auction:customeritems_edit' item.id %}" class="card-link">Edit Item</a>
+                </div>
+            </div>
+
+

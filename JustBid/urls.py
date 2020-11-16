@@ -13,14 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.views.generic import TemplateView
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from auction.views import customerItemsListToBid
+
 urlpatterns = [
+    path('', customerItemsListToBid , name='home'),
     path('admin/', admin.site.urls),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('auction/', include('auction.urls')),
+    path('auction/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 admin.site.site_header = 'JustBid Administration'   # default: "Django Administration"

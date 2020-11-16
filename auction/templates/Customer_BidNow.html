@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load justbid_extras %}
+{% block content %}
+     <div class="text-center ">
+    <h3 class="panel-heading">Bid for <i class="text-success text-capitalize" >{{ item.name }}</i></h3>
+    <p></p><p></p>
+         <p><b>Actual Price:</b> <i>${{ item.price }}</i></p>
+         <p><b>Item Created By:</b> <i>{{ item.customer_id.username }}</i></p>
+    {% if item.id|maxBidValue %}
+        <p><b>Current Max Bid Amount:</b> <i>${{ item.id|maxBidValue }}</i></p>
+    {% endif %}
+    <form method="POST">{% csrf_token %}
+        <b>{{ form.as_p }}</b>
+        {% if item.end_date|checkEndDatePassed %}
+            <button type="submit" class="save btn btn-info btn-color">Bid</button>
+        {% else %}
+            <button class="btn btn-primary mr-2 disabled">
+                <a onclick="return false;" class="card-link btn-info text-white">Bid</a>
+            </button>
+        {% endif %}
+        <a href="{% url "auction:home" %}" class="btn btn-secondary ml-2">Cancel</a>
+    </form>
+    </div>
+    </div>
+
+{% endblock content %}

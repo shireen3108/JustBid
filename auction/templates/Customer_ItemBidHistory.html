@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load justbid_extras %}
+{% block title %}Bids{% endblock title %}
+{% block content %}
+
+    <div class="container">
+{% if bids%}
+    <div class="list-group">
+        <button type="button" class="list-group-item list-group-item-action active">
+            Bid History {{ bids.0.item_id.name }} ${{ bids.0.item_id.price }}
+            <span class="float-right">
+                 {% if bids.0.item_id.end_date|checkEndDatePassed %}
+                Ends by
+                 {% else %}
+                Ended
+              {% endif %}
+                {{ bids.0.item_id.end_date }}</span>
+        </button>
+        <button type="button" class="list-group-item list-group-item-action list-group-item-success">
+                <b> ${{ bids.0.amount }}</b> by {{ bids.0.customer_id }} at {{ bids.0.time }}
+        {% if bids.0.item_id.name|endswith:"BID DONE" %}
+         <a class="btn btn-secondary btn-sm float-right  mr-2 active"  class="card-link"
+                    onclick="return false;">Winner!!</a>
+
+        {% elif not bids.0.item_id.end_date|checkEndDatePassed %}
+            <a class="btn btn-secondary btn-sm float-right  mr-2" href="{% url "auction:customeritems_bidwinner" bids.0.id %}" class="card-link"
+                    onclick="return confirm('Are you sure you want to select this bid as winner {{ bids.0 }}?')">Accept as Winner?</a>
+            {% endif %}
+        </button>
+        {% for bid in bids|slice:"1:" %}
+            <button type="button" class="list-group-item list-group-item-action">
+                <b> ${{ bid.amount }}</b> by {{ bid.customer_id }} at {{ bid.time }}
+
+            </button>
+        {% endfor %}
+     <a href="{% url "auction:customer_items" %}" class="btn btn-secondary">Back to My Items</a>
+       </div>
+  {% else %}
+     <div class="list-group">
+    <button type="button" class="list-group-item list-group-item-action active ">
+             No bids available!!
+        </button>
+     <a href="{% url "auction:customer_items" %}" class="btn btn-secondary">Back to My Items</a>
+   {% endif %}
+        </div>
+
+    </div>
+{% endblock content %}

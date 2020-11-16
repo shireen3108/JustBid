@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load justbid_extras %}
+{% block title %}Bids{% endblock title %}
+{% block content %}
+<h2 class = "text-center">My Bids</h2>
+    <div class="container">
+    <div>  <button  class="btn btn-outline-info mt-2 float-right" data-toggle="modal" data-target="#exampleModalCenter">
+                                     <b>See all my bids </b>  </button> </div>
+
+        <div class="card-deck">
+            {% for bid in bids %}
+
+                {% if bid.item_id|maxBidById ==  bid.id %}
+
+                    <div class="card mb-3 mt-3 border-primary text-center " style="min-width: 20rem;max-width: 20rem">
+                        {% if bid.item_id.image %}
+                            <img class="card-img-top mt-1" src="{{ bid.item_id.image.url }}" alt="Card image cap"
+                                 style="width:175px;height:175px;align-self: center">
+                        {% else %}
+                            <img class="card-img-top mt-1" src='{% static "images/JustBid_logo.png" %}'
+                                 alt="Card image cap"
+                                 style="width:175px;height:175px;align-self: center">
+                        {% endif %}
+                    <i class="fa fa-gavel fa-2x"><sup>{{ bid.item_id|getMyBidsCount:user }}</sup></i>
+
+                        <div class="card-body">
+                        {% if 'Repost' in bid.item_id.name %}
+                            <p class="card-text"><h4>{{ bid.item_id.name|cut:'- Repost' }}</h4></p>
+                            {% else %}
+                            <p class="card-text"><h4>{{ bid.item_id.name }}</h4></p>
+                        {% endif %}
+                        {% if bid.item_id.name|endswith:"BID DONE" %}
+                            <h4 class="card-text text-danger font-weight-bold blink_me"> Winner
+                                    is {{ bid.item_id|maxBidBy }} ${{ bid.item_id|maxBidValue }} </h4>
+                        {% endif %}
+                            <p class="card-text"><b>Actual price:</b> ${{ bid.item_id.price }}</p>
+                            <p class="card-text"><b>My bid</b> ${{ bid.amount }} <b>at</b> {{ bid.time }}</p>
+
+
+
+                            <p class="card-text"><b>Current Max bid ${{ bid.item_id | maxBidValue }}</b> </p>
+                            <p class="card-text muted"><b>Created by</b> {{ bid.item_id.customer_id.username }}
+                                <b>at</b> {{ bid.item_id.start_date }}</p>
+                            <h4 class="card-text"> <small class="text-muted"><span
+                                    id="endDate{{ bid.id }}"
+                                    style="display: none"> {{ bid.item_id.end_date |date:"D, d M Y H:i:s" }}</span></small>
+                            </h4>
+                            <span id="bidID{{ bid.id }}" style="display: none"> {{ bid.id }}</span>
+                            <div id="defaultCountdown{{ bid.id }}" class="text-danger font-weight-bold h5"></div>
+                            <p class="card-text "><small class="text-muted">Latest bid by {{ bid.item_id | maxBidBy }}
+                                at ${{ bid.item_id | maxBidValue }}</small></p>
+                            {% if bid.item_id.end_date|checkEndDatePassed %}
+                                <button class="btn btn-primary btn-sm float-right  mr-2">
+                                    <a href="{% url 'auction:customer_bid_again' bid.item_id.id %}"
+                                       class="card-link text-white">Bid Again</a>
+                                </button>
+                                <a class="btn btn-secondary btn-sm float-right  mr-2"
+                                   href="{% url "auction:customerbid_delete" bid.id %}" class="card-link"
+                                   onclick="return confirm('Are you sure you want to delete {{ bid }}?')">Delete Bid</a>
+                            {% else %}
+                                <button class="btn btn-primary btn-sm float-right  mr-2 disabled">
+                                    <a onclick="return false;" class="card-link text-white">Bid Again</a></button>
+                                <button class="btn btn-secondary btn-sm float-right  mr-2 disabled">
+                                    <a onclick="return false;" class="card-link text-white">Delete Bid</a></button>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+    </div>
+    <!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">History</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+               {% for bid in bids %}
+            <button type="button" class="list-group-item list-group-item-action">
+              <b> {{ bid.item_id.name }}</b> for <b> ${{ bid.amount }}</b>  at {{ bid.time }}
+
+            </button>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

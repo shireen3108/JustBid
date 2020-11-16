@@ -1,0 +1,82 @@
+body {
+    position: relative;
+    margin: 0;
+    padding-bottom: 0rem;
+    min-height: 100%;
+}
+
+#navigation,.navbar .navbar-default{
+    background-image: url("../images/navbanner-b.png") ;
+    background-size: cover;
+}
+
+.invalid-feedback {
+    display: block !important;
+}
+
+#carousel_controls{
+    text-align: center !important;
+}
+
+.errorlist{
+    color: red;
+}
+
+.navbar{
+    border-color: #c55a11;
+    border-bottom-style: solid;
+}
+
+.navbar-toggler-icon{
+   background-color:red;
+}
+.backgroundcolors{
+     background-image:linear-gradient(#b5cce5,#398db1);
+}
+
+.footer {
+    position: relative;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    text-align: center;
+    color: white;
+    /* font-family: "Helvetica Neue", Arial, sans-serif; */
+    background-image:linear-gradient(#398db1, #ff634729) ;
+}
+
+.fa-arrow-right{
+    color: Tomato;
+}
+
+.carousel-item {
+    align-items: inherit;
+}
+
+.center-card{
+    align-self: center;
+    max-width: 100% !important;
+
+}
+
+/*@media (min-width: 768px)*/
+/*.col-md-3 {*/
+/*    -webkit-box-flex: 0;*/
+/*    flex: 0 0 100%;*/
+/*    max-width: 100%;*/
+/*}*/
+
+.blink_me {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.btn-info{
+    background-color: #28a745 !important;
+}

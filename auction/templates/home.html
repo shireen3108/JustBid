@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load justbid_extras %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+
+<div class="container">
+    {% if user.is_authenticated %}
+        {% if  itemsSearchedString %} <a class="link float-right mt-2" href="{% url 'auction:home' %}">Clear all</a>  {% endif %}
+        {% if items %}
+            <h2 class="text-center">Items Available To Bid <small>{{ itemsSearchedString }} </small></h2>
+
+            <div class="card-deck ">
+                {% for item in items %}
+                    <div class="card mb-3 mt-3" style="min-width: 20rem;max-width: 20rem">
+                        {% if item.image %}
+                            <img class="card-img-top mt-1" src="{{ item.image.url }}" alt="Card image cap"
+                                 style="width:175px;height:175px;align-self: center">
+                        {% else %}
+                            <img class="card-img-top mt-1" src='{% static "images/JustBid_logo.png" %}'
+                                 alt="Card image cap"
+                                 style="width:175px;height:175px;align-self: center">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">Name: {{ item.name }}</h5>
+                            <p class="card-text">Description: {{ item.comments }}</p>
+                            <p class="card-text">Start Date: {{ item.start_date }}</p>
+                            <p class="card-text">End Date: {{ item.end_date }}</p>
+                            <p class="card-text">Price: ${{ item.price }}</p>
+                            {% if item not in items_bidded %}
+                                <a class="btn btn-primary btn-sm float-right mr-2"
+                                   href="{% url 'auction:customer_bid_now' item.id %}" class="card-link">Bid Now</a>
+                            {% else %}
+                                <a class="btn btn-primary btn-sm float-right mr-2"
+                                   href="{% url 'auction:customer_bid_again' item.id %}" class="card-link">Bid Again</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                {% else %}
+                <h4 class="text-center">No {{ itemsSearchedString }} Items available to bid . Sorry !!</h4>
+            </div>
+        {% endif %}
+    {% else %}
+
+        {% if trending_bids %}
+            <!--Carousel Wrapper-->
+            <h5 class="text-center">TRENDING ITEMS</h5>
+            <div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
+                <!--Controls-->
+                <div id="carousel_controls">
+                    <a class="btn-floating" href="#multi-item-example" data-slide="prev"><i
+                            class="fa fa-chevron-left"></i></a>
+                    <a class="btn-floating" href="#multi-item-example" data-slide="next"><i
+                            class="fa fa-chevron-right"></i></a>
+                </div>
+                <!--/.Controls-->
+
+                <!--Indicators-->
+                <ol class="carousel-indicators ">
+                    <li data-target="#multi-item-example" data-slide-to="0" class="active"></li>
+                    <li data-target="#multi-item-example" data-slide-to="1"></li>
+
+                </ol>
+                <!--/.Indicators-->
+
+
+                <!--Slides-->
+                <div class="carousel-inner center" role="listbox">
+
+                    {% for bid in trending_bidsAll %}
+
+                        <!--First slide-->
+                        <div class="carousel-item  {% if forloop.counter == 1 %}active{% endif %}">
+                            {#                            {% if forloop.counter <= 4 %}#}
+
+                            <div class="center-card col-md-3">
+                                <div class="card mb-2">
+                                    {% if bid.item_id.image %}
+                                        <img class="card-img-top mt-1" src="{{ bid.item_id.image.url }}"
+                                             alt="Card image cap"
+                                             style="width:175px;height:175px;align-self: center">
+                                    {% else %}
+                                        <img class="card-img-top mt-1" src='{% static "images/JustBid_logo.png" %}'
+                                             alt="Card image cap"
+                                             style="width:175px;height:175px;align-self: center">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <i class="fa fa-gavel fa-2x float-right"><sup>{{ bid.item_id|getBidsCount }}</sup></i>
+                                        {% if 'Repost' in bid.item_id.name %}
+                                            <h4 class="card-title">{{ bid.item_id.name|cut:'- Repost' }}</h4>
+                                        {% elif 'BID DONE' in bid.item_id.name %}
+                                            <h4 class="card-title">{{ bid.item_id.name|cut:'BID DONE' }}</h4>
+                                        {% else %}
+                                            <h4 class="card-title">{{ bid.item_id.name }}</h4>
+                                        {% endif %}
+                                        <p class="card-text small">{{ bid.item_id.comments }}</p>
+                                        <h6>Actual Price: ${{ bid.item_id.price }}</h6>
+                                        <h6>Current Max Bid: ${{ bid.amount }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            {#                            {% endif %}#}
+                        </div><!--/.First slide-->
+
+                    {% endfor %}
+                </div>
+                <!--/.Second slide-->
+            </div>
+        {% endif %} {#        closing trending bids if#}
+
+
+        <p class="font-weight-bold">Just follow 3 simple steps</p>
+        <div class="row font-weight-bold">
+            <div class="col ml-2">
+                <div class="row">Step 1</div>
+                <div class="row">CREATE AN ACCOUNT</div>
+            </div>
+            <div class="col"><sup><i class="fa fa-arrow-right fa-5x  "></i></sup></div>
+            <div class="col">
+                <div class="row">Step 2</div>
+                <div class="row">POST OR FIND AN ITEM</div>
+            </div>
+            <div class="col"><sup><i class="fa fa-arrow-right fa-5x  "></i></sup></div>
+            <div class="col">
+                <div class="row">Step 3</div>
+                <div class="row">BID & WIN THE ITEM</div>
+            </div>
+        </div>
+
+        <div class="card-deck center">
+            <div class="card bg-dark text-white mt-5 text-center justify-content-center">
+                <img class="card-img img-responsive center-block" src='{% static 'images/Picture4.png' %}'
+                     alt="Card image">
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-center ">Upcoming New Items</h5>
+                </div>
+                <p class="card-text ">Sale from November 11 to November 30. All new items..Hurry!!</p>
+                <p class="card-text text-center text-muted">Last updated 3 mins ago</p>
+            </div>
+            <div class="card bg-dark text-white mt-5 text-center justify-content-center">
+
+                <img class="card-img" src='{% static 'images/Cards11.png' %}' alt="Card image">
+                <div class="card-img-overlay">
+                    <h5 class="card-title">Upcoming Sales</h5>
+                </div>
+                <p class="card-text">Winter Auction Sale up from December 10 to December 31 2021. Bid and Win your favourite
+                    Items. </p>
+                <p class="card-text text-muted">Last updated 10 mins ago</p>
+            </div>
+        </div>
+    {% endif %}
+    </div>
+{% endblock content %}
+

@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 class Customer(AbstractUser):
     street_address = models.CharField(max_length=100, blank=True, null=True, default='')
@@ -13,13 +14,14 @@ class Customer(AbstractUser):
     email = models.EmailField(null=False, unique=True, error_messages={'unique': 'A user with that email already exists.'})
     # first_name = models.CharField(max_length=30, blank=False)
     # last_name = models.CharField(max_length=150, blank=False)
+
     class Meta:
         verbose_name = "Customer"
 
 class Item(models.Model):
     name=models.CharField(max_length=50, blank=False)
     price=models.DecimalField(max_digits=5,blank=False, decimal_places=2)
-    start_date= models.DateTimeField()
+    start_date= models.DateTimeField('Start Date:   (end date will be +7days)', blank=False)
     end_date= models.DateTimeField()
     image=models.ImageField(upload_to="items/images", null=True)
     comments= models.CharField(max_length=300, null=True, blank=True)
@@ -34,7 +36,7 @@ class Item(models.Model):
 
 class Bid(models.Model):
     amount= models.DecimalField(max_digits=5,blank=False, decimal_places=2)
-    time= models.DateTimeField()
+    time= models.DateTimeField(default=timezone.now)
     item_id = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='bid_item_id')
     customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='bid_customer_id')
 
