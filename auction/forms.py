@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from self import self
+# from self import self
 from django import forms
 from .models import Customer, Item, Bid
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, ReadOnlyPasswordHashField
