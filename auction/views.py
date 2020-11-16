@@ -219,7 +219,7 @@ def customerBidAgain(request, pk):
     item = Item.objects.filter(id=pk).first()
     if request.user.id == item.customer_id.id:
         return HttpResponseForbidden()
-    mycurrentBid = Bid.objects.filter(customer_id_id=request.user.id).order_by('-time').first().amount
+    mycurrentBid = Bid.objects.filter(customer_id_id=request.user.id, item_id=pk).order_by('-time').first().amount
     if request.method == 'POST':
         form = CustomerBidsForm(request.POST, identifier=item)
         # form = CustomerBidsForm(request.POST)
