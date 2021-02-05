@@ -81,18 +81,12 @@ WSGI_APPLICATION = 'JustBid.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'justbid',
-    #     'USER': 'justbid_owner',
-    #     'PASSWORD':'shireen'
-    # }
-    'default': {
+      'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'ec2-54-156-149-189.compute-1.amazonaws.com',
         'NAME': 'de1c1id49i6434',
-        'USER': 'glibnoxctlyxom',
-        'PASSWORD': '3fe19ccbd9bba59c630b705da936b2cde83dec058e87a57cfe76822fd10f2511'
+        'USER': 'yourusername',
+        'PASSWORD': 'yourpassword'
     }
 }
 
@@ -143,8 +137,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'auction/static')
 STATIC_URL = '/static/'
 
 ## aws s3 settings to upload items dynamically
-AWS_ACCESS_KEY_ID = ' AKIAIEDQLNGF5EFHVUAA'
-AWS_SECRET_ACCESS_KEY = '868CBfvqV2C2QJt7PfM/lRYQ3as4weSf+6rnwNHD'
+AWS_ACCESS_KEY_ID = ' youraccesskey'
+AWS_SECRET_ACCESS_KEY = 'yoursecretaccesskey'
 AWS_STORAGE_BUCKET_NAME = 'justbid.com'
 
 AWS_DEFAULT_ACL = None
@@ -160,8 +154,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Email settings for JustBid.com 8210 Assignment 3 Individual Project on Nov 2 2020
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'justbid.com404@gmail.com'
-EMAIL_HOST_PASSWORD = '8210as3!'
+EMAIL_HOST_USER = 'yourgmail@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
